@@ -1,9 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
+{% block title %}{{ user.get_full_name }}{% endblock %}
 
 {% block content %}
 
-<img src="{{ user.image_url }}" alt="{{ user.first_name }} {{ user.last_name }}">
+<!-- Displays user page with image, full name, and buttons to either edit or delete user -->
+
+<img class="profile_pic" src="{{ user.image_url }}" alt="{{ user.get_full_name }}">
+
+<div class="profile_info">
+    <h1 class="user_name">{{ user.get_full_name }}</h1>
+
+    <div class="button-container">
+        <form action="/users/{{ user.id }}/edit">
+            <button type="submit" class="edit_button">Edit</button>
+        </form>
+    
+        <form method="post" action="/users/{{ user.id }}/delete">
+            <button type="submit" class="delete_button">Delete</button>
+        </form>
+    </div>
+
+</div>
 
 {% endblock %}

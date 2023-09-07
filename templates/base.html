@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/app.css">
     <title>{% block title %}All Users{% endblock %}</title>
 </head>
 <body>
@@ -11,14 +12,17 @@
     <h1>Users:</h1>
 
     <ul class="list_of_users">
+        <!-- List of all users with hyperlink that goes to their own individual page -->
         {% for user in users %}
-        <li><a href="/users/{{ user.id }}">{{ user.first_name}} {{ user.last_name}}</a></li>
+        <li><a href="/users/{{ user.id }}">{{ user.get_full_name }}</a></li>
         {% endfor %}
     </ul>
 
+    <!-- Button to add a new user to database -->
     <a href="/users/new">
         <button>Add User</button>
     </a>
     {% endblock %}
+    
 </body>
 </html>

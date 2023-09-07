@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ user.get_full_name }}{% endblock %}
+
+{% block content %}
+
+<h1> Edit a User: </h1>
+
+<form class="user_edit_form" method="post" action="/users/{{ user.id }}/edit">
+    <!-- Form that user can edit their information in. If user does not want to 
+    make edits, cancel button allows user to go back to their own page -->
+    
+    <label for="first_name">First Name: </label> 
+    <input name="first_name" id="first_name" placeholder="Enter a first name">
+
+    <label for="last_name">Last Name: </label> 
+    <input name="last_name" id="first_name" placeholder="Enter a last name">
+
+    <label for="image_url">Image URL: </label> 
+    <input name="image_url" id="image_url" placeholder="Provide an image of this user">
+    
+    <div>
+        <button type="submit" class="cancel_button">Cancel</button>
+        <button class="green_button" type="submit">Save</button>
+    </div>
+
+</form>
+
+{% endblock %}
