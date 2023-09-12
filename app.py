@@ -2,14 +2,15 @@
 
 from flask import Flask, render_template, request, redirect, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, default_image, connect_db, User
+from models import db, default_image, connect_db, User, Post
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "oh-so-secret"
+app.app_context().push()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.app_context().push()
 
 debug = DebugToolbarExtension(app)
 
@@ -21,6 +22,9 @@ def home():
     """ Redirects user to all users page """
 
     return redirect("/users")
+
+
+# User Database routes
 
 @app.route("/users")
 def all_users(): 
@@ -55,7 +59,9 @@ def user_page(user_id):
     """ Displays user page for primary key of user passed in through route """
 
     user = User.query.get_or_404(user_id)
-    return render_template("user_page.html", user=user)
+    posts = Post.query.filter_by(user_FK=user.id)
+
+    return render_template("user_page.html", user=user, posts=posts)
 
 @app.route("/users/<int:user_id>/edit")
 def user_edit(user_id): 
@@ -89,6 +95,7 @@ def user_edit_post(user_id):
 @app.route("/users/<int:user_id>/delete", methods=["POST"])
 def user_delete(user_id): 
     """ Deletes existing user from database when button is clicked """
+    
     user = User.query.get_or_404(user_id) 
     
     db.session.delete(user)
@@ -97,4 +104,78 @@ def user_delete(user_id):
     return redirect("/users")
 
 
+# Post Database routes
+
+@app.route("/users/<int:user_id>/posts/new")
+def display_new_post_form(user_id):
+    """ Displays form to create new post for user """
     
+    user = User.query.get_or_404(user_id)
+
+    return render_template("post_new_form.html", user=user)
+
+@app.route("/users/<int:user_id>/posts/new", methods=["POST"])
+def create_new_post(user_id):
+    """ Handles POST request for new post of user """
+    
+    user = User.query.get_or_404(user_id)
+    
+    title = request.form["title"]
+    content = request.form["content"]
+
+    new_post = Post(title=title, content=content, created_at=datetime.now(), user_FK= user.id)
+
+    db.session.add(new_post)
+    db.session.commit()
+
+    return redirect(f"/users/{user.id}")
+
+@app.route("/posts/<int:post_id>")
+def display_post(post_id):
+    """ Displays title, content, and author of post clicked. There is a 
+    foreign key to user table """
+
+    post = Post.query.get_or_404(post_id)
+
+    return render_template("post_page.html", post=post)
+
+@app.route("/posts/<int:post_id>/edit")
+def post_edit(post_id): 
+    """ Displays edit form for clicked post """
+
+    post = Post.query.get_or_404(post_id)
+
+    return render_template("post_edit_form.html", post=post)
+
+@app.route("/posts/<int:post_id>/edit", methods=["POST"])
+def post_edit_post(post_id): 
+    """ Displays edit form for clicked post. If user, leaves title or
+    content fields unchanged, default will be previous values stored in database. 
+    If any changes are made, changes are saved to database """
+
+    post = Post.query.get_or_404(post_id)
+
+    if post.title != request.form["title"]:
+        post.title = request.form["title"]
+
+    if post.content != request.form["content"]:
+        post.content = request.form["content"]
+    
+    db.session.commit()
+
+    return redirect(f"/posts/{post_id}")
+
+@app.route("/posts/<int:post_id>/delete", methods=["POST"])
+def post_delete(post_id): 
+    """ Deletes existing post from database when button is clicked """
+    
+    post = Post.query.get_or_404(post_id) 
+    user = User.query.get_or_404(post.user.id)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(f"/users/{user.id}")
+
+
+

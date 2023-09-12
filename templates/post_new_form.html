@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.get_full_name }} New Post Form{% endblock %}
+
+{% block content %}
+<h1>Add New Post for {{ user.get_full_name }} </h1>
+
+<form class="post_new_form" method="post" action="/users/{{ user.id }}/posts/new">
+    <!-- New post form asking for title and content -->
+
+    <label for="title">Title: </label> 
+    <input name="title" id="title" placeholder="Enter a title" required>
+
+    <label for="content">Content: </label> 
+    <input name="content" id="content" placeholder="Enter content" required>
+    
+    <button class="green_button" type="submit">Add</button>
+    
+
+</form>
+
+<div class="cancel-button-container">
+    <!-- Button to cancel and go back to individual user page-->
+    <form class="post_form_cancel" action="/users/{{ user.id }}">
+        <button type="submit" class="button_profile_page edit">Cancel</button>
+    </form>
+</div>
+{% endblock %}

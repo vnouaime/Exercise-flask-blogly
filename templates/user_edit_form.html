@@ -7,8 +7,7 @@
 <h1> Edit a User: </h1>
 
 <form class="user_edit_form" method="post" action="/users/{{ user.id }}/edit">
-    <!-- Form that user can edit their information in. If user does not want to 
-    make edits, cancel button allows user to go back to their own page -->
+    <!-- Form that user can edit their information in to -->
     
     <label for="first_name">First Name: </label> 
     <input name="first_name" id="first_name" placeholder="Enter a first name">
@@ -19,11 +18,14 @@
     <label for="image_url">Image URL: </label> 
     <input name="image_url" id="image_url" placeholder="Provide an image of this user">
     
-    <div>
-        <button type="submit" class="cancel_button">Cancel</button>
-        <button class="green_button" type="submit">Save</button>
-    </div>
+    <button class="green_button" type="submit">Save</button>
 
 </form>
+
+<div class="cancel-button-container">
+    <!-- Button to go back to user page --> 
+    <form class="post_form_cancel" action="/users/{{ user.id }}">
+        <button type="submit" class="button_profile_page edit">Cancel</button>
+    </form>
 
 {% endblock %}

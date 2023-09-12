@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ post.title }} By {{ post.user.get_full_name }}{% endblock %}
+
+{% block content %}
+
+<h1> Edit a Post: </h1>
+
+<form class="post_edit_form" method="post" action="/posts/{{ post.user.id }}/edit">
+    <!-- Form that user can edit their previous post -->
+    
+    <label for="title">Title: </label> 
+    <input name="title" id="title" value="{{ post.title }}">
+
+    <label for="content">Post Content: </label> 
+    <input name="content" id="content" value="{{ post.content }}">
+    
+    <button class="green_button" type="submit">Edit</button>
+
+</form>
+
+<div class="cancel-button-container">
+    <!-- Button to go back to user page --> 
+    <form class="post_form_cancel" action="/posts/{{ post.id }}">
+        <button type="submit" class="button_profile_page edit">Cancel</button>
+    </form>
+
+{% endblock %}

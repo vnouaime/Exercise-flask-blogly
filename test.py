@@ -1,39 +1,22 @@
 from unittest import TestCase
 from app import app
 from flask import session
-from models import db, default_image, connect_db, User
+from models import db, connect_db, default_image, User, Post
 
 class FlaskTests(TestCase): 
     
     def setUp(self): 
-        """ Creates test users """
-        
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///your_test_database_name'
-
-        with app.test_client() as client:
-            with app.app_context():
-                db.create_all()
-
-                self.new_user_1 = User(first_name="Vera", last_name="Nouaime")
-                self.new_user_2 = User(first_name="John", last_name="Smith")
-                self.new_user_3 = User(first_name="Susie", last_name="Sal")
-
-                db.session.add_all([self.new_user_1, self.new_user_2, self.new_user_3])
-                db.session.commit()
+        """Set up the Flask app for testing."""
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
+        app.config['SQLALCHEMY_ECHO'] = False
+        app.config['TESTING'] = True 
+        connect_db(app)
+        db.create_all()
 
     def tearDown(self): 
         """ Deletes test users from database """ 
 
-        with app.app_context():
-            db.session.rollback()
-
-            test_users = User.query.all()
-            for user in test_users:
-                db.session.delete(user)
-
-            db.session.commit()
-            db.session.close()
+        db.session.close()
 
     def test_home_page(self): 
         """ Tests redirect to users route and status code """

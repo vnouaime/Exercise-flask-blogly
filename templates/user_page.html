@@ -4,7 +4,8 @@
 
 {% block content %}
 
-<!-- Displays user page with image, full name, and buttons to either edit or delete user -->
+<!-- Displays user page with image, full name, and buttons to either edit or delete user. Also, 
+contains unordered list of all user's posts with button to add a new one.  -->
 
 <img class="profile_pic" src="{{ user.image_url }}" alt="{{ user.get_full_name }}">
 
@@ -13,11 +14,25 @@
 
     <div class="button-container">
         <form action="/users/{{ user.id }}/edit">
-            <button type="submit" class="edit_button">Edit</button>
+            <button type="submit" class="button_profile_page edit">Edit</button>
         </form>
     
         <form method="post" action="/users/{{ user.id }}/delete">
-            <button type="submit" class="delete_button">Delete</button>
+            <button type="submit" class="button_profile_page delete">Delete</button>
+        </form>
+    </div>
+
+    <div class="posts-container">
+        <h2>Posts</h2>
+
+        <ul class="posts_list">
+            {% for post in posts %}
+            <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+        
+        <form action="/users/{{ user.id }}/posts/new">
+            <button type="submit">Add Post</button>
         </form>
     </div>
 
