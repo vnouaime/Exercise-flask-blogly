@@ -1,14 +1,20 @@
 """Blogly application."""
-
+import os
 from flask import Flask, render_template, request, redirect, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, default_image, connect_db, User, Post
 from datetime import datetime
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "oh-so-secret"
 app.app_context().push()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
+
+if os.environ['FLASK_ENV'] == "testing":
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
+else: 
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
@@ -23,7 +29,7 @@ def home():
 
     return redirect("/users")
 
-
+################################################################################################
 # User Database routes
 
 @app.route("/users")
@@ -104,6 +110,7 @@ def user_delete(user_id):
     return redirect("/users")
 
 
+################################################################################################
 # Post Database routes
 
 @app.route("/users/<int:user_id>/posts/new")
