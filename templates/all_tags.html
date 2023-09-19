@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}All Tags{% endblock %}
+
+{% block content %}
+
+<h1>Tags:</h1>
+
+<ul class="list_of_tags">
+    <!-- List of all tags with hyperlink that goes to their own individual page -->
+    {% for tag in tags %}
+    <li><a href="/tags/{{ tag.id }}">{{ tag.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<!-- Button to create a new tag to database -->
+<a href="/tags/new">
+    <button>Add Tag</button>
+</a>
+
+{% endblock %}

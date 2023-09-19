@@ -80,9 +80,9 @@ class FlaskTests(TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertIn('<h1>Create New User: </h1>', html)
-            self.assertIn('<input name="first_name" id="first_name" placeholder="Enter a first name" required>', html)
-            self.assertIn('<input name="last_name" id="last_name" placeholder="Enter a last name" required>', html) 
-            self.assertIn('<input name="image_url" id="image_url" placeholder="Provide an image of this user">', html)
+            self.assertIn('<input name="first_name" class="input-form-css" placeholder="Enter a first name" required>', html)
+            self.assertIn('<input name="last_name" class="input-form-css" placeholder="Enter a last name" required>', html) 
+            self.assertIn('<input name="image_url" class="input-form-css" placeholder="Provide an image of this user">', html)
             self.assertIn('<button class="green_button" type="submit">Add</button>', html)
             
     def test_new_user_form(self):
@@ -111,9 +111,9 @@ class FlaskTests(TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertIn(f'<title>Edit {user.get_full_name}</title>', html)
-            self.assertIn('<input name="first_name" id="first_name" placeholder="Enter a first name">', html)
-            self.assertIn('<input name="last_name" id="last_name" placeholder="Enter a last name">', html)
-            self.assertIn('<input name="image_url" id="image_url" placeholder="Provide an image of this user">', html)
+            self.assertIn('<input name="first_name" class="input-form-css" placeholder="Enter a first name">', html)
+            self.assertIn('<input name="last_name" class="input-form-css" placeholder="Enter a last name">', html)
+            self.assertIn('<input name="image_url" class="input-form-css" placeholder="Provide an image of this user">', html)
             
     def test_edit_user_form(self):
         """ Testing POST request for editing existing user """
@@ -138,7 +138,6 @@ class FlaskTests(TestCase):
             user = User.query.get(5)
             if user is not None:
             
-            
                 response = client.post(f'/users/{user.id}/delete', follow_redirects=True)
          
                 self.assertEqual(response.status_code, 200)
@@ -158,8 +157,8 @@ class FlaskTests(TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertIn(f'<h1>Add New Post for {user.get_full_name} </h1>', html)
-            self.assertIn('<input name="title" id="title" placeholder="Enter a title" required>', html)
-            self.assertIn('<input name="content" id="content" placeholder="Enter content" required>', html)
+            self.assertIn('<input name="title" class="input-form-css" placeholder="Enter a title" required>', html)
+            self.assertIn('<input name="content" class="input-form-css" placeholder="Enter content" required>', html)
             self.assertIn('<button class="green_button" type="submit">Add</button>', html)
             self.assertIn('<button type="submit" class="button_profile_page edit">Cancel</button>', html)
     
@@ -208,8 +207,8 @@ class FlaskTests(TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertIn(f'<title>Edit {post.title} By {post.user.get_full_name}</title>', html)
-            self.assertIn(f'<input name="title" id="title" value="{ post.title}">', html)
-            self.assertIn(f'<input name="content" id="content" value="{post.content}">', html)
+            self.assertIn(f'<input name="title" class="input-form-css" value="{ post.title }">', html)
+            self.assertIn(f'<input name="content" class="input-form-css" value="{ post.content }">', html)
 
     def test_post_edit(self):
         """ Testing POST request for editing existing post """
@@ -237,7 +236,8 @@ class FlaskTests(TestCase):
             if post is not None:
             
                 response = client.post(f'/posts/{post.id}/delete', follow_redirects=True)
-         
+                post = Post.query.get(10)
+
                 self.assertEqual(response.status_code, 200)
                 self.assertIsNone(post)
 

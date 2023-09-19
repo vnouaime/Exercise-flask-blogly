@@ -6,17 +6,22 @@
 <h1>Add New Post for {{ user.get_full_name }} </h1>
 
 <form class="post_new_form" method="post" action="/users/{{ user.id }}/posts/new">
-    <!-- New post form asking for title and content -->
+    <!-- New post form asking for title, content, and tags -->
 
-    <label for="title">Title: </label> 
-    <input name="title" id="title" placeholder="Enter a title" required>
+    <label for="title" class="label-form-css">Title: </label> 
+    <input name="title" class="input-form-css" placeholder="Enter a title" required>
 
-    <label for="content">Content: </label> 
-    <input name="content" id="content" placeholder="Enter content" required>
+    <label for="content" class="label-form-css">Content: </label> 
+    <input name="content" class="input-form-css" placeholder="Enter content" required>
+    
+    {% for tag in tags %}
+        <div class="checkbox-container">
+            <input type="checkbox" id="tag" name="tag" value="{{ tag.name }}">
+            <label for="tag">{{ tag.name }}</label>
+        </div>
+    {% endfor %}
     
     <button class="green_button" type="submit">Add</button>
-    
-
 </form>
 
 <div class="cancel-button-container">

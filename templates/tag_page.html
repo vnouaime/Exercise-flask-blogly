@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tag.title }}{% endblock %}
+
+{% block content %}
+
+<div>
+    <!-- Container containing tag name with posts that are associated with particular tag -->
+    <h1>{{ tag.name }}</h1>
+
+    <ul class="list_of_post_tags">
+        <!-- List of all posts associated with tag. Has hyperlink that goes to post's individual page -->
+        {% for post in all_posts %}
+        <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+<div class="button-container">
+    <!-- Container containing all tags, edit, and delete buttons-->
+    <form action="/tags">
+        <button type="submit" class="button_profile_page cancel">All Tags</button>
+    </form>
+
+    <form action="/tags/{{ tag.id }}/edit">
+        <button type="submit" class="button_profile_page edit">Edit</button>
+    </form>
+    
+    <form method="post" action="/tags/{{ tag.id }}/delete">
+        <button type="submit" class="button_profile_page delete">Delete</button>
+    </form>
+</div>
+
+{% endblock %}

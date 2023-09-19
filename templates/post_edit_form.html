@@ -9,11 +9,19 @@
 <form class="post_edit_form" method="post" action="/posts/{{ post.user.id }}/edit">
     <!-- Form that user can edit their previous post -->
     
-    <label for="title">Title: </label> 
-    <input name="title" id="title" value="{{ post.title }}">
+    <label for="title" class="label-form-css">Title: </label> 
+    <input name="title" class="input-form-css" value="{{ post.title }}">
 
-    <label for="content">Post Content: </label> 
-    <input name="content" id="content" value="{{ post.content }}">
+    <label for="content" class="label-form-css">Post Content: </label> 
+    <input name="content" class="input-form-css" value="{{ post.content }}">
+
+    {% for tag in tags %}
+    <div class="checkbox-container">
+        <input type="checkbox" id="tag" name="tag" value="{{ tag.name }}"
+        {% if tag in post.tags %} checked {% endif %}>
+        <label for="tag">{{ tag.name }}</label>
+    </div>
+    {% endfor %}
     
     <button class="green_button" type="submit">Edit</button>
 

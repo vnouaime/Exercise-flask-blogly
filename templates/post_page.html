@@ -11,6 +11,19 @@
     <p class="post_content">{{ post.content }}</p>
 
     <p><i>By: {{ post.user.get_full_name }}</i></p>
+
+</div>
+
+<div class="tag-container">
+    <h2>Tags:</h2>
+    <div class="button-container">
+        <!-- Container containing tag buttons that when clicked go to their own page-->
+        {% for tag in post.tags %}
+            <form action="/tags/{{ tag.id }}">
+                <button type="submit" class="button_profile_page cancel">{{ tag.name }}</button>
+            </form>
+        {% endfor %}
+    </div>
 </div>
 
 <div class="button-container">

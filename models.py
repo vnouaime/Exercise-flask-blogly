@@ -43,4 +43,19 @@ class Post(db.Model):
     content = db.Column(db.String(1000), nullable=False, unique=False)
     created_at = db.Column(db.DateTime, nullable=False)
     user_FK = db.Column(db.ForeignKey('users.id'), nullable=False)
+    
+    tags = db.relationship('Tag', secondary="posts_tags", backref="posts")
+    
+class Tag(db.Model): 
+    """ New tag with attributes of id and name. """
+    __tablename__="tags"
 
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    
+class PostTag(db.Model): 
+    """ Middle table for M2M relationship between Post and Tag """
+    __tablename__="posts_tags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
